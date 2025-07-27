@@ -1,6 +1,12 @@
-import { HabitsProvider } from './contexts/HabitsContext';
+import { useState } from 'react';
+import { format, startOfWeek, addDays, isSameDay } from 'date-fns';
+import { HabitsProvider, useHabits, type Habit } from './contexts/HabitsContext';
 import { ThemeProvider } from './contexts/ThemeContext';
-import HabitTracker from './components/HabitTracker';
+import HabitCard from './components/HabitCard';
+import StatsDashboard from './components/StatsDashboard';
+import ThemeToggle from './components/ThemeToggle';
+import QuoteBox from './components/QuoteBox';
+import EditHabitModal from './components/EditHabitModal';
 import './App.css';
 
 function HabitTracker() {
@@ -9,6 +15,10 @@ function HabitTracker() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
   const [showStats, setShowStats] = useState(false);
+  
+  const handleEditHabit = (habit: Habit) => {
+    setEditingHabit(habit);
+  };
   
   // Generate dates for the current week starting on Monday
   const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
@@ -124,28 +134,33 @@ function HabitTracker() {
                 {habits.map((habit) => (
                   <tr key={habit.id}>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <HabitCard
-                        habit={habit}
-                        selectedDate={selectedDate}
-                        onToggle={(date) => toggleHabitCompletion(habit.id, date)}
-                        onEdit={() => handleEditHabit(habit)}
-                        onDelete={() => {
-                          if (window.confirm(`Are you sure you want to delete "${habit.name}"?`)) {
-                            deleteHabit(habit.id);
-                          }
-                        }}
-                      />
-                          </button>
-                          <button
-                            onClick={() => deleteHabit(habit.id)}
-                            className="text-red-500 hover:text-red-700 transition-colors p-1"
-                            aria-label={`Delete ${habit.name}`}
-                          >
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                          </button>
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <HabitCard
+                            habit={habit}
+                            selectedDate={selectedDate}
+                            onToggle={(date) => toggleHabitCompletion(habit.id, date)}
+                            onEdit={() => handleEditHabit(habit)}
+                            onDelete={() => {
+                              if (window.confirm(`Are you sure you want to delete "${habit.name}"?`)) {
+                                deleteHabit(habit.id);
+                              }
+                            }}
+                          />
                         </div>
+                        <button
+                          onClick={() => {
+                            if (window.confirm(`Are you sure you want to delete "${habit.name}"?`)) {
+                              deleteHabit(habit.id);
+                            }
+                          }}
+                          className="ml-2 text-red-500 hover:text-red-700 transition-colors p-1"
+                          aria-label={`Delete ${habit.name}`}
+                        >
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                          </svg>
+                        </button>
                       </div>
                     </td>
                     {weekDays.map((day) => (
