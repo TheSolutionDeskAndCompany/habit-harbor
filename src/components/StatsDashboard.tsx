@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { Bar } from 'react-chartjs-2';
-import { Habit } from '../contexts/HabitsContext';
-import { format, startOfWeek, addDays, isWithinInterval, isSameDay } from 'date-fns';
+import type { Habit } from '../contexts/HabitsContext';
+import { format, startOfWeek, addDays } from 'date-fns';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -10,7 +10,7 @@ import {
   Title,
   Tooltip,
   Legend,
-  ChartOptions,
+  type ChartOptions,
 } from 'chart.js';
 
 // Register ChartJS components
@@ -37,7 +37,7 @@ export default function StatsDashboard({ habits, selectedDate }: StatsDashboardP
     const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     
     // Calculate completion rate for each day of the week
-    const completionData = weekDays.map((day, index) => {
+    const completionData = weekDays.map((day) => {
       const dayStr = format(day, 'yyyy-MM-dd');
       const dayHabits = habits.filter(habit => 
         habit.frequency.includes(days[day.getDay()])
@@ -68,24 +68,26 @@ export default function StatsDashboard({ habits, selectedDate }: StatsDashboardP
     };
   }, [habits, selectedDate]);
   
-  // Calculate habit completion rates
-  const habitStats = useMemo(() => {
-    return habits.map(habit => {
-      const totalDays = habit.records.length;
-      if (totalDays === 0) return { ...habit, completionRate: 0 };
-      
-      const completedDays = habit.records.filter(record => record.completed).length;
-      const completionRate = Math.round((completedDays / totalDays) * 100);
-      
-      return {
-        ...habit,
-        completionRate,
-        completedDays,
-        totalDays,
-      };
-    }).sort((a, b) => b.completionRate - a.completionRate);
+  // Calculate habit statistics
+  const calculateHabitStats = (habit: Habit) => {
+    const records = habit.records || [];
+    const completedDays = records.filter(record => record.completed).length;
+    const totalDays = records.length || 1; // Avoid division by zero
+    const completionRate = Math.round((completedDays / totalDays) * 100);
+    
+    return {
+      ...habit,
+      completionRate,
+      completedDays,
+      totalDays
+    };
+  };
+
+  // Calculate stats for all habits
+  const habitsWithStats = useMemo(() => {
+    return habits.map(habit => calculateHabitStats(habit));
   }, [habits]);
-  
+
   // Chart options
   const chartOptions: ChartOptions<'bar'> = {
     responsive: true,
@@ -123,17 +125,17 @@ export default function StatsDashboard({ habits, selectedDate }: StatsDashboardP
       
       <div>
         <h3 className="text-lg font-medium mb-4 text-gray-800 dark:text-gray-200">Habit Performance</h3>
-        <div className="space-y-4">
-          {habitStats.map(habit => (
-            <div key={habit.id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-              <div className="flex justify-between items-center mb-2">
+        <div className="mt-6 space-y-4">
+          {habitsWithStats.map((habit) => (
+            <div key={habit.id} className="space-y-1">
+              <div className="flex justify-between">
                 <span className="font-medium text-gray-900 dark:text-white">{habit.name}</span>
                 <span className="text-sm font-medium">{habit.completionRate}%</span>
               </div>
               <div className="w-full bg-gray-200 dark:bg-gray-600 rounded-full h-2.5">
                 <div 
                   className={`h-2.5 rounded-full ${getCompletionColor(habit.completionRate)}`}
-                  style={{ width: `${habit.completionRate}%` }}
+                  style={{ width: `${Math.min(100, Math.max(0, habit.completionRate))}%` }}
                 ></div>
               </div>
               <div className="mt-1 text-xs text-gray-500 dark:text-gray-400">

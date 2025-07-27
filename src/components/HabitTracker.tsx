@@ -22,14 +22,8 @@ export default function HabitTracker() {
     e.preventDefault();
     if (!newHabit.trim()) return;
     
-    addHabit({
-      id: Date.now().toString(),
-      name: newHabit.trim(),
-      color: 'blue-500',
-      frequency: ['Mon', 'Wed', 'Fri'],
-      records: [],
-      createdAt: new Date().toISOString(),
-    });
+    // The addHabit function only expects a name, it will handle the rest
+    addHabit(newHabit.trim());
     
     setNewHabit('');
   };

@@ -1,5 +1,5 @@
-import { format, isToday, isYesterday, subDays, isSameDay } from 'date-fns';
-import { Habit } from '../contexts/HabitsContext';
+import { format, subDays } from 'date-fns';
+import type { Habit } from '../contexts/HabitsContext';
 
 type HabitCardProps = {
   habit: Habit;

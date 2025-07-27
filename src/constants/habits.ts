@@ -1,4 +1,4 @@
-import { Habit } from '../contexts/HabitsContext';
+import type { Habit } from '../contexts/HabitsContext';
 
 export const colorOptions = [
   { value: 'blue-500', label: 'Blue', bg: 'bg-blue-500' },
