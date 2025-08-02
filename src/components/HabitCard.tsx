@@ -1,14 +1,29 @@
 import { format, subDays } from 'date-fns';
 import type { Habit } from '../contexts/HabitsContext';
 
+/**
+ * Props for the HabitCard component
+ */
 type HabitCardProps = {
+  /** The habit data to display */
   habit: Habit;
+  /** Callback function to toggle habit completion for a specific date */
   onToggle: (date: Date) => void;
+  /** Callback function to edit the habit */
   onEdit: () => void;
+  /** Callback function to delete the habit */
   onDelete: () => void;
+  /** Currently selected date */
   selectedDate: Date;
 };
 
+/**
+ * HabitCard component displays an individual habit with its completion status,
+ * streak information, and action buttons for editing and deleting.
+ * 
+ * @param props - The component props
+ * @returns JSX element representing a habit card
+ */
 export default function HabitCard({ habit, onToggle, onEdit, onDelete, selectedDate }: HabitCardProps) {
   // Calculate current streak
   const calculateStreak = () => {

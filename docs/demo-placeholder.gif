@@ -1,0 +1,14 @@
+# Demo GIF Placeholder
+
+This is a placeholder for the demo GIF. To create an actual demo:
+
+1. Run the application: `npm run dev`
+2. Use screen recording software (OBS, QuickTime, etc.)
+3. Record a 30-60 second demo showing:
+   - Adding a new habit
+   - Marking habits as complete/incomplete
+   - Switching between light/dark themes
+   - Viewing the statistics dashboard
+   - Editing a habit
+
+Replace this file with the actual demo.gif

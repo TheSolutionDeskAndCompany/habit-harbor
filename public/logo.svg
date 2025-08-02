@@ -1,0 +1,25 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Harbor/Water Base -->
+  <path d="M8 48 C8 48, 16 44, 32 44 C48 44, 56 48, 56 48 L56 56 C56 58.2, 54.2 60, 52 60 L12 60 C9.8 60, 8 58.2, 8 56 L8 48 Z" fill="#3B82F6"/>
+  
+  <!-- House/Habit Structure -->
+  <path d="M20 32 L32 20 L44 32 L44 44 L20 44 Z" fill="#1F2937"/>
+  <path d="M18 32 L32 18 L46 32 L44 34 L32 22 L20 34 Z" fill="#374151"/>
+  
+  <!-- Checkmark (Habit Completion) -->
+  <path d="M26 34 L30 38 L38 30" stroke="#10B981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  
+  <!-- Calendar Grid -->
+  <rect x="22" y="26" width="2" height="2" fill="#6B7280"/>
+  <rect x="26" y="26" width="2" height="2" fill="#6B7280"/>
+  <rect x="30" y="26" width="2" height="2" fill="#6B7280"/>
+  <rect x="34" y="26" width="2" height="2" fill="#6B7280"/>
+  <rect x="38" y="26" width="2" height="2" fill="#6B7280"/>
+  <rect x="40" y="26" width="2" height="2" fill="#6B7280"/>
+  
+  <!-- Progress Dots -->
+  <circle cx="14" cy="38" r="2" fill="#10B981"/>
+  <circle cx="18" cy="40" r="2" fill="#10B981"/>
+  <circle cx="22" cy="42" r="2" fill="#E5E7EB"/>
+  <circle cx="26" cy="44" r="2" fill="#E5E7EB"/>
+</svg>
