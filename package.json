@@ -2,8 +2,8 @@
   "name": "habit-harbor",
   "private": true,
   "version": "1.0.0",
-  "type": "module",
-  "description": "A beautiful habit tracking application built with React and TypeScript",
+  "main": "electron/main.js",
+  "description": "A beautiful cross-platform desktop habit tracking application built with Electron, React and TypeScript",
   "keywords": ["habits", "tracker", "react", "typescript", "productivity", "self-improvement"],
   "author": "TheSolutionDeskAndCompany",
   "homepage": "https://TheSolutionDeskAndCompany.github.io/habit-harbor",
@@ -17,13 +17,16 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "electron": "electron .",
+    "electron:dev": "concurrently \"npm run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:pack": "npm run build && electron-builder",
+    "electron:dist": "npm run build && electron-builder --publish=never",
+    "electron:build": "npm run build && electron-builder --win --mac --linux",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
     "test:ui": "vitest --ui",
-    "test:coverage": "vitest --coverage",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "test:coverage": "vitest --coverage"
   },
   "dependencies": {
     "@types/chart.js": "^2.9.41",
@@ -45,10 +48,13 @@
     "@types/react-dom": "^19.1.6",
     "@vitejs/plugin-react": "^4.6.0",
     "autoprefixer": "^10.4.21",
+    "concurrently": "^8.2.2",
+    "electron": "^28.2.0",
+    "electron-builder": "^24.9.1",
+    "electron-updater": "^6.1.8",
     "eslint": "^9.30.1",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
-    "gh-pages": "^6.3.0",
     "globals": "^16.3.0",
     "jsdom": "^23.0.0",
     "postcss": "^8.5.6",
@@ -57,7 +63,53 @@
     "tailwindcss": "^4.1.11",
     "typescript": "~5.8.3",
     "typescript-eslint": "^8.35.1",
-    "vite": "^7.0.4",
-    "vitest": "^1.0.0"
+    "vite": "^5.4.0",
+    "vitest": "^1.0.0",
+    "wait-on": "^7.2.0"
+  },
+  "build": {
+    "appId": "com.thesolutiondeskandcompany.habitharbor",
+    "productName": "Habit Harbor",
+    "directories": {
+      "output": "dist-electron"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "assets/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["x64"]
+        }
+      ],
+      "category": "Office"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "TheSolutionDeskAndCompany",
+      "repo": "habit-harbor"
+    }
   }
 }
